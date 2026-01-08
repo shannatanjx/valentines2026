@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Valentine Eligibility Quiz 💘</title>
-
 <style>
   body{
     margin:0;
@@ -14,33 +13,32 @@
     display:flex;
     align-items:center;
     justify-content:center;
+    padding:24px;
   }
-
   .card{
     background:#fff;
     padding:30px;
     border-radius:20px;
     box-shadow:0 15px 40px rgba(0,0,0,.12);
-    max-width:520px;
+    max-width:560px;
     width:100%;
     text-align:center;
   }
-
-  h1,h2{
-    margin-top:0;
+  h1,h2{margin-top:0}
+  .progress{
+    margin-bottom:16px;
+    color:#666;
+    font-size:14px;
   }
-
   .question{
     font-size:20px;
-    margin-bottom:20px;
+    margin-bottom:18px;
   }
-
   .options{
     display:flex;
     flex-direction:column;
     gap:12px;
   }
-
   button{
     padding:14px;
     border-radius:14px;
@@ -49,38 +47,41 @@
     cursor:pointer;
     background:#ff2f86;
     color:white;
-    transition:transform .15s, background .15s;
+    transition:transform .15s, background .15s, box-shadow .15s;
+    box-shadow:0 10px 22px rgba(255,47,134,.22);
   }
+  button:hover{transform:translateY(-2px); background:#ff4d9c;}
+  button.secondary{ background:#ff2f86; color:white; } /* both buttons pink */
+  button.secondary:hover{ background:#ff4d9c; }
 
-  button:hover{
-    transform:translateY(-2px);
-    background:#ff4d9c;
-  }
-
-  button.secondary{
-  background:#ff2f86;
-  color:white;
-}
-
-  .error{
-    color:#e11d48;
+  .msg{
     margin-top:14px;
-    font-weight:600;
+    font-weight:700;
+    min-height:24px;
   }
-
-  .progress{
-    margin-bottom:16px;
-    color:#666;
-    font-size:14px;
+  .msg.bad{color:#e11d48;}
+  .msg.good{color:#16a34a;}
+  .shake{
+    animation: shake .35s ease;
+  }
+  @keyframes shake{
+    0%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+    100%{transform:translateX(0)}
+  }
+  .tiny{
+    color:#777;
+    font-size:12px;
+    margin-top:8px;
   }
 </style>
 </head>
 
 <body>
-
-<div class="card" id="app">
-  <!-- Content injected by JS -->
-</div>
+  <div class="card" id="app"></div>
 
 <script>
 /* ✨ EDIT YOUR QUESTIONS + CORRECT ANSWERS HERE ✨ */
@@ -132,42 +133,97 @@ const QUESTIONS = [
   },
   {
     q: "Where was i going when i send you my first full face tele bubble? (no checking horr hehe)",
-    options: ["going to meet fiona", "going for a concert", "going out with my mummy", "going to meet youu"],
+    options: [
+      "going to meet fiona",
+      "going for a concert",
+      "going out with my mummy",
+      "going to meet youu"
+    ],
     answer: "going for a concert"
   }
 ];
 
+/* 😈 Fake wrong-answer messages (teasing) */
+const TEASES = [
+  "❌ Wrong. You *should* know this by now 😌",
+  "❌ Hmm. Suspicious. Are you sure you’re my boyfriend? 🤨",
+  "❌ That’s embarrassing (for you). Try again 😭",
+  "❌ Nope. Think harder. I’m watching 👀",
+  "❌ Wrong answer detected. Relationship audit in progress 🧾",
+  "❌ Babe… please. Try again 😩",
+  "❌ Not even close (but I still love you) 😙",
+  "❌ Incorrect. Redeem yourself immediately 😌"
+];
+
 let current = 0;
+let wrongCountThisQ = 0;
 const app = document.getElementById("app");
+
+function escapeQuotes(s){ return String(s).replace(/'/g, "\\'"); }
 
 function renderQuestion(){
   const q = QUESTIONS[current];
+  wrongCountThisQ = 0;
 
   app.innerHTML = `
-    <div class="progress">Question ${current + 1} of 10</div>
+    <div class="progress">Question ${current + 1} of ${QUESTIONS.length}</div>
     <h2>💘 Valentine Quiz</h2>
     <div class="question">${q.q}</div>
+
     <div class="options">
       ${q.options.map(opt =>
-        `<button onclick="checkAnswer('${opt.replace(/'/g,"\\'")}')">${opt}</button>`
+        `<button type="button" onclick="checkAnswer('${escapeQuotes(opt)}')">${opt}</button>`
       ).join("")}
     </div>
-    <div class="error" id="error"></div>
+
+    <div class="msg" id="msg"></div>
+    <div class="tiny">Rule: Wrong answer = you can’t proceed 😌</div>
   `;
+}
+
+function randomTease(){
+  return TEASES[Math.floor(Math.random() * TEASES.length)];
+}
+
+function lockButtons(ms=850){
+  const btns = app.querySelectorAll("button");
+  btns.forEach(b => b.disabled = true);
+  setTimeout(()=>btns.forEach(b => b.disabled = false), ms);
 }
 
 function checkAnswer(selected){
   const correct = QUESTIONS[current].answer;
+  const msgEl = document.getElementById("msg");
+
   if(selected === correct){
-    current++;
-    if(current < QUESTIONS.length){
-      renderQuestion();
-    } else {
-      renderSuccess();
-    }
+    msgEl.className = "msg good";
+    msgEl.textContent = "✅ Correct. Okay you DO know me 😌💗";
+
+    // small delay so he sees the praise
+    lockButtons(650);
+    setTimeout(() => {
+      current++;
+      if(current < QUESTIONS.length) renderQuestion();
+      else renderSuccess();
+    }, 700);
+
   } else {
-    document.getElementById("error").textContent =
-      "❌ Wrong answer. You are NOT ready to proceed 😌";
+    wrongCountThisQ++;
+    msgEl.className = "msg bad";
+    msgEl.innerHTML = randomTease();
+
+    // shake the card for "emotional damage"
+    app.classList.remove("shake");
+    void app.offsetWidth; // restart animation
+    app.classList.add("shake");
+
+    // optional: escalate message after multiple wrong tries on same question
+    if (wrongCountThisQ >= 3){
+      msgEl.innerHTML = "❌ Third try?? Babe… focus 😭 (Try again)";
+    }
+
+    // brief lock to prevent rage clicking
+    lockButtons(650);
   }
 }
 
@@ -176,9 +232,9 @@ function renderSuccess(){
     <h1>💖 Eligibility Test Passed 💖</h1>
     <p>You have proven that you know me well enough.</p>
     <h2>You are officially eligible to be my Valentine 💘</h2>
-    <div class="options">
-      <button onclick="yes()">YES, I WANT TO 💞</button>
-      <button class="secondary" onclick="reset()">YES BUT FOREVER HEHE</button>
+    <div class="options" style="margin-top:18px">
+      <button type="button" onclick="yes()">YES, I WANT TO 💞</button>
+      <button type="button" class="secondary" onclick="yesForever()">YES BUT FOREVER HEHE</button>
     </div>
   `;
 }
@@ -191,13 +247,15 @@ function yes(){
   `;
 }
 
-function reset(){
-  current = 0;
-  renderQuestion();
+function yesForever(){
+  app.innerHTML = `
+    <h1>💍 LOCKED IN 💍</h1>
+    <p>Forever it is.</p>
+    <p><b>Terms:</b> unlimited cuddles, no giving up, and lots of love 💗</p>
+  `;
 }
 
 renderQuestion();
 </script>
-
 </body>
 </html>
