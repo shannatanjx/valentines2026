@@ -1,782 +1,203 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Valentine’s Questionnaire 💘</title>
-  <style>
-    :root{
-      --bg1:#ffedf4;
-      --bg2:#fff7fb;
-      --card:#ffffffcc;
-      --ink:#2b2b2b;
-      --muted:#666;
-      --accent:#ff3b8d;
-      --accent2:#ff7bb6;
-      --good:#1b9e77;
-      --warn:#d97706;
-      --shadow: 0 12px 30px rgba(0,0,0,.10);
-      --radius: 18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--ink);
-      background: radial-gradient(1200px 900px at 20% 0%, var(--bg1), transparent 60%),
-                  radial-gradient(1200px 900px at 90% 10%, #ffe3ef, transparent 55%),
-                  linear-gradient(180deg, var(--bg2), #fff);
-      min-height:100vh;
-      padding:24px;
-    }
-    .wrap{max-width:980px;margin:0 auto;}
-    header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; margin-bottom:18px;
-    }
-    .title{
-      display:flex; flex-direction:column; gap:4px;
-    }
-    h1{margin:0;font-size:clamp(22px,4vw,34px);letter-spacing:-0.02em;}
-    .sub{color:var(--muted);margin:0;font-size:14px}
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:10px 12px; border-radius:999px;
-      background: #fff; box-shadow: var(--shadow);
-      font-size:13px; color:var(--muted);
-    }
-    .pill b{color:var(--ink)}
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:18px;
-    }
-    @media (max-width: 900px){
-      .grid{grid-template-columns: 1fr;}
-    }
-    .card{
-      background:var(--card);
-      border:1px solid rgba(255,255,255,.7);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(6px);
-      padding:18px;
-    }
-    .section-title{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px; margin:0 0 10px;
-      font-size:18px;
-    }
-    .small{font-size:12px;color:var(--muted)}
-    .q{
-      padding:12px;
-      background:#fff;
-      border:1px solid rgba(0,0,0,.06);
-      border-radius:14px;
-      margin:10px 0;
-    }
-    .q h3{margin:0 0 10px;font-size:15px}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    label.opt{
-      display:flex; align-items:center; gap:8px;
-      padding:10px 12px;
-      border:1px solid rgba(0,0,0,.08);
-      border-radius:12px;
-      background:#fff;
-      cursor:pointer;
-      transition:.15s transform, .15s border-color, .15s box-shadow;
-      user-select:none;
-    }
-    label.opt:hover{transform: translateY(-1px); border-color: rgba(255,59,141,.5); box-shadow: 0 8px 18px rgba(255,59,141,.12);}
-    input[type="radio"], input[type="checkbox"]{accent-color: var(--accent); cursor:pointer;}
-    input[type="text"], textarea, select{
-      width:100%;
-      padding:12px;
-      border-radius:12px;
-      border:1px solid rgba(0,0,0,.12);
-      font:inherit;
-      outline:none;
-      background:#fff;
-    }
-    textarea{min-height:88px; resize:vertical;}
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;
-    }
-    button{
-      border:0;
-      padding:12px 14px;
-      border-radius:14px;
-      font:inherit;
-      cursor:pointer;
-      background: var(--accent);
-      color:#fff;
-      box-shadow: 0 10px 22px rgba(255,59,141,.28);
-      transition:.15s transform, .15s filter;
-    }
-    button:hover{transform: translateY(-1px); filter: brightness(1.02);}
-    button.secondary{
-      background:#fff;
-      color:var(--ink);
-      border:1px solid rgba(0,0,0,.12);
-      box-shadow: none;
-    }
-    button.ghost{
-      background:transparent;
-      color:var(--muted);
-      border:1px dashed rgba(0,0,0,.18);
-      box-shadow:none;
-    }
-    .progress{
-      height:10px;
-      background: rgba(0,0,0,.07);
-      border-radius:999px;
-      overflow:hidden;
-      margin:10px 0 0;
-    }
-    .bar{
-      height:100%;
-      width:0%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius:999px;
-      transition: width .2s ease;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Eligibility Quiz 💘</title>
 
-    /* Results */
-    .resultBox{
-      padding:14px;
-      border-radius:14px;
-      background:#fff;
-      border:1px solid rgba(0,0,0,.08);
-      margin-top:12px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-size:12px;
-      padding:8px 10px;
-      border-radius:999px;
-      background: rgba(255,59,141,.10);
-      color: var(--ink);
-      border:1px solid rgba(255,59,141,.25);
-    }
-    .muted{color:var(--muted)}
-    .divider{height:1px;background:rgba(0,0,0,.07);margin:12px 0;}
+<style>
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg,#ffe4ec,#fff7fb);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-    /* Game */
-    .gameWrap{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .gameTop{
-      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
-    }
-    .stat{
-      background:#fff;
-      border:1px solid rgba(0,0,0,.08);
-      border-radius:14px;
-      padding:10px 12px;
-      min-width: 130px;
-    }
-    .stat b{display:block; font-size:18px}
-    canvas{
-      width:100%;
-      height:360px;
-      background: radial-gradient(600px 400px at 20% 20%, #fff, #fff5fa);
-      border-radius:16px;
-      border:1px solid rgba(0,0,0,.08);
-      box-shadow: 0 10px 24px rgba(0,0,0,.08);
-      touch-action: manipulation;
-    }
-    .hint{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.3;
-    }
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:18px;
-      transform: translateX(-50%);
-      background:#111;
-      color:#fff;
-      padding:10px 12px;
-      border-radius:12px;
-      opacity:0;
-      pointer-events:none;
-      transition:.25s opacity, .25s transform;
-      font-size:13px;
-    }
-    .toast.show{
-      opacity:1;
-      transform: translateX(-50%) translateY(-4px);
-    }
-    footer{margin-top:16px;color:var(--muted);font-size:12px;text-align:center}
-    a{color:var(--accent);text-decoration:none}
-  </style>
+  .card{
+    background:#fff;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+    max-width:520px;
+    width:100%;
+    text-align:center;
+  }
+
+  h1,h2{
+    margin-top:0;
+  }
+
+  .question{
+    font-size:20px;
+    margin-bottom:20px;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  button{
+    padding:14px;
+    border-radius:14px;
+    border:none;
+    font-size:16px;
+    cursor:pointer;
+    background:#ff2f86;
+    color:white;
+    transition:transform .15s, background .15s;
+  }
+
+  button:hover{
+    transform:translateY(-2px);
+    background:#ff4d9c;
+  }
+
+  button.secondary{
+    background:#eee;
+    color:#333;
+  }
+
+  .error{
+    color:#e11d48;
+    margin-top:14px;
+    font-weight:600;
+  }
+
+  .progress{
+    margin-bottom:16px;
+    color:#666;
+    font-size:14px;
+  }
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <header>
-      <div class="title">
-        <h1>Valentine’s Questionnaire 💘</h1>
-        <p class="sub">A tiny love quiz + a mini-game. Answer honestly, win hearts (literally).</p>
-      </div>
-      <div class="pill" id="headerPill">
-        <span>Progress:</span> <b id="progressText">0%</b>
-      </div>
-    </header>
 
-    <div class="grid">
-      <!-- Questionnaire -->
-      <section class="card" aria-labelledby="quiz-title">
-        <div class="section-title" id="quiz-title">
-          <span>Questionnaire</span>
-          <span class="small">You can save the answers as a file at the end.</span>
-        </div>
+<div class="card" id="app">
+  <!-- Content injected by JS -->
+</div>
 
-        <div class="progress" aria-label="progress bar">
-          <div class="bar" id="bar"></div>
-        </div>
+<script>
+/* ✨ EDIT YOUR QUESTIONS + CORRECT ANSWERS HERE ✨ */
+const QUESTIONS = [
+  {
+    q: "What is my favorite color?",
+    options: ["Pink", "Blue", "Black", "Purple"],
+    answer: "Pink"
+  },
+  {
+    q: "What food do I crave the most?",
+    options: ["Pizza", "Boba", "Fries", "Ice cream"],
+    answer: "Boba"
+  },
+  {
+    q: "What time do I usually sleep?",
+    options: ["10pm", "12am", "2am", "Whenever"],
+    answer: "Whenever"
+  },
+  {
+    q: "What annoys me the fastest?",
+    options: ["Slow replies", "Messy rooms", "Loud chewing", "Being ignored"],
+    answer: "Being ignored"
+  },
+  {
+    q: "What’s my love language?",
+    options: ["Words", "Quality time", "Gifts", "All of them"],
+    answer: "All of them"
+  },
+  {
+    q: "What’s my favorite type of date?",
+    options: ["Fancy dinner", "Stay-in & talk", "Arcade", "Surprise"],
+    answer: "Stay-in & talk"
+  },
+  {
+    q: "What makes me feel safest?",
+    options: ["Reassurance", "Silence", "Space", "Money"],
+    answer: "Reassurance"
+  },
+  {
+    q: "What’s my comfort activity?",
+    options: ["Sleeping", "Watching shows", "Eating", "All of the above"],
+    answer: "All of the above"
+  },
+  {
+    q: "What do I overthink the most?",
+    options: ["Food", "Feelings", "Future", "Everything"],
+    answer: "Everything"
+  },
+  {
+    q: "Do you actually like me?",
+    options: ["Yes", "Obviously yes", "YES YES YES", "All answers are correct"],
+    answer: "All answers are correct"
+  }
+];
 
-        <form id="quiz">
-          <div class="q">
-            <h3>1) What should I call you on this page?</h3>
-            <input type="text" name="nickname" placeholder="e.g., Babe, Honey, My Love..." maxlength="40" required />
-          </div>
+let current = 0;
+const app = document.getElementById("app");
 
-          <div class="q">
-            <h3>2) Pick our vibe today:</h3>
-            <div class="row">
-              <label class="opt"><input type="radio" name="vibe" value="Cozy date" required> Cozy date 🧸</label>
-              <label class="opt"><input type="radio" name="vibe" value="Adventure" required> Adventure 🚀</label>
-              <label class="opt"><input type="radio" name="vibe" value="Food hunt" required> Food hunt 🍜</label>
-              <label class="opt"><input type="radio" name="vibe" value="Chill & talk" required> Chill & talk ☕</label>
-            </div>
-          </div>
+function renderQuestion(){
+  const q = QUESTIONS[current];
 
-          <div class="q">
-            <h3>3) Our next date idea (choose one):</h3>
-            <select name="dateIdea" required>
-              <option value="" selected disabled>Pick one…</option>
-              <option>Picnic + photos</option>
-              <option>Movie + dessert</option>
-              <option>Arcade + snacks</option>
-              <option>Stay-in: cook together</option>
-              <option>Surprise me 😌</option>
-            </select>
-          </div>
-
-          <div class="q">
-            <h3>4) Which little things make you feel most loved? (pick up to 2)</h3>
-            <div class="row" id="loveLangRow">
-              <label class="opt"><input type="checkbox" name="loveLang" value="Words"> Sweet words 💬</label>
-              <label class="opt"><input type="checkbox" name="loveLang" value="Time"> Quality time ⏳</label>
-              <label class="opt"><input type="checkbox" name="loveLang" value="Gifts"> Small gifts 🎁</label>
-              <label class="opt"><input type="checkbox" name="loveLang" value="Acts"> Helpful actions 🧹</label>
-              <label class="opt"><input type="checkbox" name="loveLang" value="Touch"> Cuddles 🤍</label>
-            </div>
-            <p class="hint">Tip: If you pick more than 2, I’ll keep only the first 2 you chose.</p>
-          </div>
-
-          <div class="q">
-            <h3>5) What’s one thing I do that you want more of?</h3>
-            <textarea name="moreOf" placeholder="Be honest but gentle 😌" required></textarea>
-          </div>
-
-          <div class="q">
-            <h3>6) What’s one thing I do that I should do less of?</h3>
-            <textarea name="lessOf" placeholder="I can take it 💪" required></textarea>
-          </div>
-
-          <div class="q">
-            <h3>7) Rapid-fire: pick one treat</h3>
-            <div class="row">
-              <label class="opt"><input type="radio" name="treat" value="Ice cream" required> Ice cream 🍦</label>
-              <label class="opt"><input type="radio" name="treat" value="Boba" required> Boba 🧋</label>
-              <label class="opt"><input type="radio" name="treat" value="Cake" required> Cake 🍰</label>
-              <label class="opt"><input type="radio" name="treat" value="Fries" required> Fries 🍟</label>
-            </div>
-          </div>
-
-          <div class="q">
-            <h3>8) Final question: Will you be my Valentine?</h3>
-            <div class="row">
-              <label class="opt"><input type="radio" name="valentine" value="YES" required> YES 💖</label>
-              <label class="opt"><input type="radio" name="valentine" value="YES (obviously)" required> YES (obviously) 😘</label>
-              <label class="opt"><input type="radio" name="valentine" value="YES (with a kiss)" required> YES (with a kiss) 💋</label>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button type="submit">Generate Love Report 💌</button>
-            <button type="button" class="secondary" id="downloadBtn" disabled>Download Answers (.txt)</button>
-            <button type="button" class="ghost" id="resetBtn">Reset</button>
-          </div>
-        </form>
-
-        <div class="resultBox" id="results" hidden>
-          <div class="badge" id="badge">💘 Love Report Ready</div>
-          <div class="divider"></div>
-          <div id="resultContent" class="muted"></div>
-        </div>
-      </section>
-
-      <!-- Mini game -->
-      <aside class="card" aria-labelledby="game-title">
-        <div class="section-title" id="game-title">
-          <span>Mini-game: Catch the Hearts</span>
-          <span class="small">30s</span>
-        </div>
-
-        <div class="gameWrap">
-          <div class="gameTop">
-            <div class="stat">
-              <span class="muted">Score</span>
-              <b id="score">0</b>
-            </div>
-            <div class="stat">
-              <span class="muted">Time</span>
-              <b id="time">30</b>
-            </div>
-            <div class="stat">
-              <span class="muted">Best</span>
-              <b id="best">0</b>
-            </div>
-          </div>
-
-          <canvas id="game" width="900" height="600" aria-label="Catch the Hearts game canvas"></canvas>
-
-          <div class="actions">
-            <button type="button" id="startGame">Start Game ▶</button>
-            <button type="button" class="secondary" id="stopGame" disabled>Stop</button>
-          </div>
-
-          <p class="hint">
-            Click/tap hearts to score. Bigger hearts are easier but worth fewer points. Smaller hearts are worth more. 💞
-          </p>
-        </div>
-      </aside>
+  app.innerHTML = `
+    <div class="progress">Question ${current + 1} of 10</div>
+    <h2>💘 Valentine Quiz</h2>
+    <div class="question">${q.q}</div>
+    <div class="options">
+      ${q.options.map(opt =>
+        `<button onclick="checkAnswer('${opt.replace(/'/g,"\\'")}')">${opt}</button>`
+      ).join("")}
     </div>
+    <div class="error" id="error"></div>
+  `;
+}
 
-    <footer>
-      Made with ♥ in one file. Tip: On GitHub Pages, set the branch to <b>main</b> and folder to <b>/root</b>.
-    </footer>
-  </div>
-
-  <div class="toast" id="toast"></div>
-
-  <script>
-    // ---------- Helpers ----------
-    const $ = (sel, el=document) => el.querySelector(sel);
-    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
-
-    function toast(msg){
-      const t = $("#toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(()=>t.classList.remove("show"), 1400);
+function checkAnswer(selected){
+  const correct = QUESTIONS[current].answer;
+  if(selected === correct){
+    current++;
+    if(current < QUESTIONS.length){
+      renderQuestion();
+    } else {
+      renderSuccess();
     }
+  } else {
+    document.getElementById("error").textContent =
+      "❌ Wrong answer. You are NOT ready to proceed 😌";
+  }
+}
 
-    // ---------- Questionnaire Logic ----------
-    const quiz = $("#quiz");
-    const results = $("#results");
-    const resultContent = $("#resultContent");
-    const downloadBtn = $("#downloadBtn");
-    const resetBtn = $("#resetBtn");
-    const progressText = $("#progressText");
-    const bar = $("#bar");
+function renderSuccess(){
+  app.innerHTML = `
+    <h1>💖 Eligibility Test Passed 💖</h1>
+    <p>You have proven that you know me well enough.</p>
+    <h2>You are officially eligible to be my Valentine 💘</h2>
+    <div class="options">
+      <button onclick="yes()">YES, I WANT TO 💞</button>
+      <button class="secondary" onclick="reset()">I need another chance 😅</button>
+    </div>
+  `;
+}
 
-    // Limit checkboxes to 2 (keep first 2)
-    const loveChecks = $$('input[name="loveLang"]');
-    loveChecks.forEach(ch => ch.addEventListener("change", () => {
-      const checked = loveChecks.filter(x => x.checked);
-      if (checked.length > 2){
-        // uncheck the most recently checked
-        ch.checked = false;
-        toast("Pick up to 2 😊");
-      }
-      updateProgress();
-    }));
+function yes(){
+  app.innerHTML = `
+    <h1>💋 Congratulations 💋</h1>
+    <p>You are now <b>officially my Valentine</b>.</p>
+    <p>Reward: unlimited affection, kisses, and love 💕</p>
+  `;
+}
 
-    // Progress tracking
-    const requiredFields = () => [
-      $('input[name="nickname"]'),
-      ...$$('input[name="vibe"]'),
-      $('select[name="dateIdea"]'),
-      ...loveChecks,
-      $('textarea[name="moreOf"]'),
-      $('textarea[name="lessOf"]'),
-      ...$$('input[name="treat"]'),
-      ...$$('input[name="valentine"]'),
-    ];
+function reset(){
+  current = 0;
+  renderQuestion();
+}
 
-    function isAnswered(el){
-      if (!el) return false;
-      if (el.type === "radio"){
-        const name = el.name;
-        return $$(`input[type="radio"][name="${name}"]`).some(r => r.checked);
-      }
-      if (el.type === "checkbox"){
-        // handled by group; count group as answered if at least one checked
-        const name = el.name;
-        return $$(`input[type="checkbox"][name="${name}"]`).some(c => c.checked);
-      }
-      if (el.tagName === "SELECT"){
-        return el.value && el.value.trim().length > 0;
-      }
-      return el.value && el.value.trim().length > 0;
-    }
+renderQuestion();
+</script>
 
-    function updateProgress(){
-      // Count unique question groups
-      const groups = [
-        { key:"nickname", ok:isAnswered($('input[name="nickname"]')) },
-        { key:"vibe", ok:isAnswered($('input[name="vibe"]')) },
-        { key:"dateIdea", ok:isAnswered($('select[name="dateIdea"]')) },
-        { key:"loveLang", ok:isAnswered($('input[name="loveLang"]')) },
-        { key:"moreOf", ok:isAnswered($('textarea[name="moreOf"]')) },
-        { key:"lessOf", ok:isAnswered($('textarea[name="lessOf"]')) },
-        { key:"treat", ok:isAnswered($('input[name="treat"]')) },
-        { key:"valentine", ok:isAnswered($('input[name="valentine"]')) },
-      ];
-      const done = groups.filter(g => g.ok).length;
-      const pct = Math.round((done / groups.length) * 100);
-      progressText.textContent = pct + "%";
-      bar.style.width = pct + "%";
-    }
-
-    requiredFields().forEach(el => {
-      el.addEventListener("input", updateProgress);
-      el.addEventListener("change", updateProgress);
-    });
-    updateProgress();
-
-    function collectAnswers(){
-      const fd = new FormData(quiz);
-      // loveLang can have multiple
-      const loveLang = fd.getAll("loveLang");
-      // enforce max 2 in case
-      const loveLang2 = loveLang.slice(0,2);
-
-      return {
-        nickname: (fd.get("nickname") || "").trim(),
-        vibe: fd.get("vibe"),
-        dateIdea: fd.get("dateIdea"),
-        loveLang: loveLang2,
-        moreOf: (fd.get("moreOf") || "").trim(),
-        lessOf: (fd.get("lessOf") || "").trim(),
-        treat: fd.get("treat"),
-        valentine: fd.get("valentine"),
-      };
-    }
-
-    function loveScore(ans){
-      // Fun little scoring (not serious):
-      let score = 0;
-      if (ans.valentine && ans.valentine.includes("YES")) score += 40;
-      score += ans.loveLang.length * 10;
-      score += ans.moreOf.length ? Math.min(20, ans.moreOf.length / 6) : 0;
-      score += ans.lessOf.length ? Math.min(20, ans.lessOf.length / 8) : 0;
-      return Math.round(Math.min(100, score));
-    }
-
-    function vibeMessage(vibe){
-      const map = {
-        "Cozy date": "Blanket, snacks, and a playlist. I’m in. 🧸",
-        "Adventure": "We’re going out and making memories. 🚀",
-        "Food hunt": "We eat first, ask questions later. 🍜",
-        "Chill & talk": "Slow night, deep talks, comfy vibes. ☕"
-      };
-      return map[vibe] || "Whatever we do, it’s better with you. 💗";
-    }
-
-    function buildReport(ans){
-      const score = loveScore(ans);
-      const loveLangText = ans.loveLang.length ? ans.loveLang.join(", ") : "—";
-      const lines = [
-        `Hi ${ans.nickname || "my love"} 💘`,
-        ``,
-        `✨ Today’s vibe: ${ans.vibe}`,
-        `🗓️ Next date idea: ${ans.dateIdea}`,
-        `💞 Makes you feel loved: ${loveLangText}`,
-        ``,
-        `➕ You want more of:`,
-        `${ans.moreOf || "—"}`,
-        ``,
-        `➖ You want less of:`,
-        `${ans.lessOf || "—"}`,
-        ``,
-        `🍰 Treat pick: ${ans.treat}`,
-        `💌 Valentine answer: ${ans.valentine}`,
-        ``,
-        `📈 Cute love score: ${score}/100`,
-      ];
-
-      // Add a tiny promise based on love language
-      const promise = (() => {
-        const set = new Set(ans.loveLang);
-        if (set.has("Time")) return "Promise: I’ll protect more quality time for us this month. ⏳";
-        if (set.has("Words")) return "Promise: I’ll say the sweet things out loud more often. 💬";
-        if (set.has("Acts")) return "Promise: I’ll show love in small helpful actions you can feel. 🧹";
-        if (set.has("Touch")) return "Promise: Expect extra hugs, no refunds. 🤍";
-        if (set.has("Gifts")) return "Promise: I’ll plan a small surprise that’s *you*-coded. 🎁";
-        return "Promise: I’ll love you loudly and consistently. 💗";
-      })();
-
-      lines.push("", promise, "", "— End of report —");
-      return { score, text: lines.join("\n") };
-    }
-
-    function reportToHtml(text){
-      // Safe-ish: escape
-      const esc = (s) => s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
-      return "<pre style='margin:0;white-space:pre-wrap;line-height:1.45;'>" + esc(text) + "</pre>";
-    }
-
-    function downloadText(filename, text){
-      const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    quiz.addEventListener("submit", (e) => {
-      e.preventDefault();
-      // basic validity
-      if (!quiz.reportValidity()) {
-        toast("Fill in all required answers 💗");
-        return;
-      }
-      const ans = collectAnswers();
-      const rep = buildReport(ans);
-
-      results.hidden = false;
-      $("#badge").textContent = `💘 Love Report • ${rep.score}/100`;
-      resultContent.innerHTML = reportToHtml(rep.text);
-
-      downloadBtn.disabled = false;
-      downloadBtn.onclick = () => {
-        const safeName = (ans.nickname || "valentine").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-        downloadText(`valentine-answers-${safeName || "my-love"}.txt`, rep.text);
-        toast("Downloaded 💌");
-      };
-
-      toast("Report generated 💌");
-    });
-
-    resetBtn.addEventListener("click", () => {
-      quiz.reset();
-      results.hidden = true;
-      downloadBtn.disabled = true;
-      updateProgress();
-      toast("Reset ✨");
-    });
-
-    // ---------- Mini Game: Catch the Hearts ----------
-    const canvas = $("#game");
-    const ctx = canvas.getContext("2d");
-
-    // handle high DPI
-    function fitCanvas(){
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-    window.addEventListener("resize", fitCanvas);
-    // initial size after layout
-    setTimeout(fitCanvas, 0);
-
-    let hearts = [];
-    let running = false;
-    let score = 0;
-    let best = Number(localStorage.getItem("vday_best") || 0);
-    $("#best").textContent = best;
-
-    let timeLeft = 30;
-    let timerId = null;
-    let animId = null;
-
-    function rand(min,max){ return Math.random()*(max-min)+min; }
-
-    function spawnHeart(){
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
-      const r = rand(14, 38);
-      // smaller heart => more points
-      const points = Math.round((50 - r) / 2); // ~6..18
-      hearts.push({
-        x: rand(r, w - r),
-        y: h + r + rand(0, 40),
-        r,
-        vy: rand(0.8, 2.6),
-        wob: rand(0, Math.PI*2),
-        points,
-        alive: true
-      });
-    }
-
-    function drawHeart(x,y,r){
-      // Simple heart path
-      ctx.save();
-      ctx.translate(x,y);
-      ctx.scale(r/18, r/18);
-      ctx.beginPath();
-      ctx.moveTo(0, 6);
-      ctx.bezierCurveTo(0, -2, -14, -2, -14, 6);
-      ctx.bezierCurveTo(-14, 14, -4, 18, 0, 26);
-      ctx.bezierCurveTo(4, 18, 14, 14, 14, 6);
-      ctx.bezierCurveTo(14, -2, 0, -2, 0, 6);
-      ctx.closePath();
-      ctx.fillStyle = "rgba(255,59,141,0.85)";
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "rgba(255,255,255,0.9)";
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    function update(){
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
-
-      ctx.clearRect(0,0,w,h);
-
-      // softly draw background text
-      ctx.save();
-      ctx.globalAlpha = 0.25;
-      ctx.font = "bold 24px system-ui, sans-serif";
-      ctx.fillText("Tap the hearts 💘", 18, 36);
-      ctx.restore();
-
-      // spawn rate increases slightly over time
-      const spawnCount = (timeLeft <= 10) ? 2 : 1;
-      if (Math.random() < 0.06) for(let i=0;i<spawnCount;i++) spawnHeart();
-
-      hearts.forEach(hh => {
-        hh.wob += 0.04;
-        hh.y -= hh.vy;
-        hh.x += Math.sin(hh.wob) * 0.6;
-
-        drawHeart(hh.x, hh.y, hh.r);
-
-        // remove if off screen
-        if (hh.y < -hh.r - 10) hh.alive = false;
-      });
-
-      hearts = hearts.filter(hh => hh.alive);
-
-      animId = requestAnimationFrame(update);
-    }
-
-    function pointerPos(evt){
-      const rect = canvas.getBoundingClientRect();
-      const x = (evt.clientX - rect.left);
-      const y = (evt.clientY - rect.top);
-      return {x,y};
-    }
-
-    function hitTest(x,y){
-      // check from last to first so topmost hearts are caught first
-      for (let i = hearts.length - 1; i >= 0; i--){
-        const hh = hearts[i];
-        const dx = x - hh.x;
-        const dy = y - hh.y;
-        if (dx*dx + dy*dy <= hh.r*hh.r){
-          return i;
-        }
-      }
-      return -1;
-    }
-
-    function addScore(points){
-      score += points;
-      $("#score").textContent = score;
-    }
-
-    function start(){
-      if (running) return;
-      running = true;
-      score = 0;
-      timeLeft = 30;
-      hearts = [];
-      $("#score").textContent = "0";
-      $("#time").textContent = timeLeft;
-      $("#startGame").disabled = true;
-      $("#stopGame").disabled = false;
-      toast("Go go go! 💞");
-
-      clearInterval(timerId);
-      timerId = setInterval(() => {
-        timeLeft -= 1;
-        $("#time").textContent = timeLeft;
-        if (timeLeft <= 0) stop();
-      }, 1000);
-
-      cancelAnimationFrame(animId);
-      animId = requestAnimationFrame(update);
-    }
-
-    function stop(){
-      if (!running) return;
-      running = false;
-      clearInterval(timerId);
-      cancelAnimationFrame(animId);
-      $("#startGame").disabled = false;
-      $("#stopGame").disabled = true;
-
-      if (score > best){
-        best = score;
-        localStorage.setItem("vday_best", String(best));
-        $("#best").textContent = best;
-        toast("NEW BEST! 💖");
-      } else {
-        toast("Game over 💘");
-      }
-
-      // show a cute message depending on score
-      if (score >= 160) alert("Okay you are INSANE at catching hearts 💘\nValentine upgrade unlocked: extra kisses 💋");
-      else if (score >= 90) alert("That was adorable 💗\nReward: one sweet treat date 🍰");
-      else alert("Still cute 💞\nReward: unlimited hugs 🤍");
-    }
-
-    $("#startGame").addEventListener("click", start);
-    $("#stopGame").addEventListener("click", stop);
-
-    canvas.addEventListener("click", (e) => {
-      if (!running) { toast("Press Start Game ▶"); return; }
-      const {x,y} = pointerPos(e);
-      const idx = hitTest(x,y);
-      if (idx >= 0){
-        const hh = hearts[idx];
-        hh.alive = false;
-        addScore(hh.points);
-      }
-    });
-
-    // mobile touch
-    canvas.addEventListener("touchstart", (e) => {
-      if (!running) { toast("Press Start Game ▶"); return; }
-      const t = e.changedTouches[0];
-      const rect = canvas.getBoundingClientRect();
-      const x = t.clientX - rect.left;
-      const y = t.clientY - rect.top;
-      const idx = hitTest(x,y);
-      if (idx >= 0){
-        const hh = hearts[idx];
-        hh.alive = false;
-        addScore(hh.points);
-      }
-    }, {passive:true});
-  </script>
 </body>
 </html>
